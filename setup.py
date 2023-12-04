@@ -12,7 +12,7 @@ setup(
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     packages=find_packages(),
-    install_requires=["opencv-contrib-python", "numpy", "tenacity"],
+    install_requires=["opencv-python", "numpy", "tenacity"],
     keywords=["python", "rtsp", "streaming", "video"],
     classifiers=[
         "Development Status :: 1 - Planning",
