@@ -1,0 +1,5 @@
+BGR24 = "bgr24"
+YUV420P = "yuv420p"
+RGB24 = "rgb24"
+YUV422P = "yuv422p"
+YUV444P = "yuv444p"
