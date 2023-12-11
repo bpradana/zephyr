@@ -7,7 +7,11 @@ Zephyr is a simple RTSP library to stream and receive video over RTSP.
 - [MediaMTX](https://github.com/bluenviron/mediamtx) as RTSP server
 
 ## Installation
-You can install Zephyr from source:
+The easiest way to install Zephyr is using pip:
+```bash
+$ pip install zephyr
+```
+But you can also install Zephyr from source:
 ```bash
 $ git clone https://github.com/bpradana/zephyr.git
 $ cd zephyr
