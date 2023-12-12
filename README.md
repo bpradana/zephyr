@@ -9,7 +9,7 @@ Zephyr is a simple RTSP library to stream and receive video over RTSP.
 ## Installation
 The easiest way to install Zephyr is using pip:
 ```bash
-$ pip install zephyr
+$ pip install zephyr-rtsp
 ```
 But you can also install Zephyr from source:
 ```bash
