@@ -5,7 +5,7 @@ on:
     types: [created]
 
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -24,11 +24,37 @@ jobs:
       - name: Build
         run: python setup.py sdist bdist_wheel
 
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: dist
+
+  release-pypi:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: dist
+          path: dist
+
       - name: Publish to PyPI
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
         run: python -m twine upload dist/*
+
+  release-github:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: dist
+          path: dist
 
       - name: Publish to GitHub
         uses: softprops/action-gh-release@v1
@@ -36,3 +62,19 @@ jobs:
           files: dist/*
           body: This is an automated release of ${{ github.ref }}.
           token: ${{ secrets.GITHUB_TOKEN }}
+
+  notify-telegram:
+    needs:
+      - release-pypi
+      - release-github
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Telegram
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            *New release of ${{ github.repository }}:*
+            ${{ github.ref }}
+            ${{ github.event.release.html_url }}
