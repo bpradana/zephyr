@@ -1,6 +1,6 @@
 import os
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 VERSION = "0.0.1"
 DESCRIPTION = "A Python library for streaming video over RTSP"
@@ -19,7 +19,7 @@ setup(
     long_description=read("README.md"),
     long_description_content_type="text/markdown",
     url="https://github.com/bpradana/zephyr",
-    packages=["zephyr"],
+    packages=find_packages(),
     install_requires=["opencv-python", "numpy", "tenacity"],
     keywords=["python", "rtsp", "streaming", "video"],
     classifiers=[
