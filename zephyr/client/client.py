@@ -1,6 +1,7 @@
 import logging
 import multiprocessing as mp
 from urllib.parse import urlparse
+import numpy as np
 
 
 from zephyr.client.reconnect import Reconnect
@@ -25,6 +26,23 @@ class Client:
         _update(child_connection): Updates the client by grabbing frames from the buffer, receiving command data, and sending frames to the main process if requested.
         release(): Sends a close request to the parent connection and joins the process.
         read(): Sends a request to the parent process to retrieve a frame, resets the request, and returns the frame.
+
+    Examples:
+        ```python
+        import cv2
+        from zephyr import Client
+
+        if __name__ == "__main__":
+            client = Client(url="rtsp://localhost:8554/test")
+
+            while True:
+                ret, frame = client.read()
+                cv2.imshow('frame', frame)
+
+                if cv2.waitKey(1) & 0xFF == ord("q"):
+                    client.release()
+                    break
+        ```
     """
 
     RESET_REQUEST = 0
@@ -129,6 +147,8 @@ class Client:
         # send request
         self.parent_conn.send(Client.FRAME_REQUEST)
         frame = self.parent_conn.recv()
+        if frame is None:
+            return None, np.zeros((1, 1, 3), dtype=np.uint8)
 
         # reset request
         self.parent_conn.send(Client.RESET_REQUEST)
