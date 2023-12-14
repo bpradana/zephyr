@@ -26,20 +26,18 @@ To stream video, you need to create a `Stream` object and call `send` with a fra
 import cv2
 from zephyr import Stream
 
-stream = Stream(
-  url="rtsp://localhost:8554/test",
-  resolution=(1280, 720),
-  fps=30,
-  bitrate="2M"
-)
+if __name__ == "__main__":
+  stream = Stream(
+    url="rtsp://localhost:8554/test",
+    resolution=(1280, 720),
+    fps=30,
+    bitrate="2M"
+  )
 
-cap = cv2.VideoCapture(0)
-while True:
-  ret, frame = cap.read()
-  stream.send(frame)
-
-stream.end()
-cap.release()
+  cap = cv2.VideoCapture(0)
+  while True:
+    ret, frame = cap.read()
+    stream.send(frame)
 ```
 ### Client
 To receive video, you need to create a `Client` object and call `read` to get the frame. You can also call `release` to stop receiving video.
@@ -47,15 +45,16 @@ To receive video, you need to create a `Client` object and call `read` to get th
 import cv2
 from zephyr import Client
 
-client = Client(url="rtsp://localhost:8554/test")
+if __name__ == "__main__":
+  client = Client(url="rtsp://localhost:8554/test")
 
-while True:
-  ret, frame = client.read()
-  cv2.imshow('frame', frame)
+  while True:
+    ret, frame = client.read()
+    cv2.imshow('frame', frame)
 
-  if cv2.waitKey(1) & 0xFF == ord("q"):
-    client.release()
-    break
+    if cv2.waitKey(1) & 0xFF == ord("q"):
+      client.release()
+      break
 ```
 
 ## License
